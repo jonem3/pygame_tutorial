@@ -21,6 +21,9 @@ car_width = 73
 
 MAIN_FONT = "comicsansms"
 
+pause = False
+crash = False
+
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('A bit Racey')
 clock = pygame.time.Clock()
@@ -55,7 +58,21 @@ def message_display(text):
     game_loop()
 
 def crash():
-    message_display('You Crashed')
+    while True:
+        largeText = pygame.font.SysFont(MAIN_FONT, 115)
+        TextSurf, TextRect = text_objects("You Crashed", largeText)
+        TextRect.center = ((display_width / 2), (display_height / 2))
+        gameDisplay.blit(TextSurf, TextRect)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        #gameDisplay.fill(white)
+
+        button("Play Again", 150, 450, 100, 50, green, bright_green, game_loop)
+        button("Quit", 550, 450, 100, 50, red, bright_red, quitgame)
+        pygame.display.update()
+        clock.tick(15)
 
 def button(msg, x, y, w, h, ic, ac, action=None):
     mouse = pygame.mouse.get_pos()
@@ -96,7 +113,32 @@ def game_intro():
         pygame.display.update()
         clock.tick(15)
 
+def unpause():
+    global pause
+    pause = False
+
+def paused():
+
+
+    while pause:
+        largeText = pygame.font.SysFont(MAIN_FONT, 115)
+        TextSurf, TextRect = text_objects("PAUSED", largeText)
+        TextRect.center = ((display_width / 2), (display_height / 2))
+        gameDisplay.blit(TextSurf, TextRect)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        #gameDisplay.fill(white)
+
+        button("Continue", 150, 450, 100, 50, green, bright_green, unpause)
+        button("Quit", 550, 450, 100, 50, red, bright_red, quitgame)
+        pygame.display.update()
+        clock.tick(15)
+
 def game_loop():
+
+    global pause
 
     x = (display_width * 0.45)
     y = (display_height*0.8)
@@ -122,8 +164,12 @@ def game_loop():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     x_change = -5
-                elif event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT:
                     x_change = 5
+                if event.key == pygame.K_ESCAPE:
+                    pause = True
+                    paused()
+
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     x_change = 0
@@ -148,7 +194,8 @@ def game_loop():
 
 
         if y < thing_starty+thing_height:
-            print('y crossover')
+            #print('y crossover')
+
 
             if x > thing_startx and x < thing_startx + thing_width or x + car_width > thing_startx and x + car_width < thing_startx + thing_width:
                 print('x crossover')
