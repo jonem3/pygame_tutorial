@@ -19,6 +19,8 @@ block_colour = (53, 115, 255)
 
 car_width = 73
 
+MAIN_FONT = "comicsansms"
+
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('A bit Racey')
 clock = pygame.time.Clock()
@@ -26,7 +28,7 @@ clock = pygame.time.Clock()
 carImg = pygame.image.load('images/racecar.png')
 
 def things_dodged(count):
-    font = pygame.font.SysFont(None, 25)
+    font = pygame.font.SysFont(MAIN_FONT, 25)
     text = font.render("Dodged: "+str(count), True, black)
     gameDisplay.blit(text, (0, 0))
 
@@ -41,7 +43,7 @@ def text_objects(text, font):
     return textSurface, textSurface.get_rect()
 
 def message_display(text):
-    largeText = pygame.font.Font('freesansbold.ttf',115)
+    largeText = pygame.font.SysFont(MAIN_FONT,115)
     TextSurf, TextRect = text_objects(text, largeText)
     TextRect.center = ((display_width/2),(display_height/2))
     gameDisplay.blit(TextSurf, TextRect)
@@ -66,7 +68,7 @@ def button(msg, x, y, w, h, ic, ac, action=None):
     else:
         pygame.draw.rect(gameDisplay, ic, (x, y, w, h))
 
-    smallText = pygame.font.Font("freesansbold.ttf", 20)
+    smallText = pygame.font.SysFont(MAIN_FONT, 20)
     textSurf, textRect = text_objects(msg, smallText)
     textRect.center = ((x + (w / 2)), (y + (h / 2)))
     gameDisplay.blit(textSurf, textRect)
@@ -84,11 +86,10 @@ def game_intro():
                 pygame.quit()
                 quit()
         gameDisplay.fill(white)
-        largeText = pygame.font.Font('freesansbold.ttf', 115)
+        largeText = pygame.font.SysFont(MAIN_FONT, 115)
         TextSurf, TextRect = text_objects("A bit Racey", largeText)
         TextRect.center = ((display_width / 2), (display_height / 2))
         gameDisplay.blit(TextSurf, TextRect)
-
         button("GO!", 150, 450, 100, 50, green, bright_green, game_loop)
         button("Quit", 550, 450, 100, 50, red, bright_red, quitgame)
 
